@@ -7,9 +7,9 @@ const Kartku = () => {
     useEffect(()=>{
         fetch('https://rickandmortyapi.com/api/character')
             .then(value => value.json())
-            .then(value => {
-                console.log(value.results)
-                setKartku(value.results)
+            .then(({results}) => {
+                console.log(results)
+                setKartku(results.filter(value=>value.id<=6))
             })
     },[])
     return (
