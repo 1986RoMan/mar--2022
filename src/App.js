@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 
-import {Users} from "./components";
+import {UserPosts, Users} from "./components";
 import {usersService} from "./services";
-
-
 
 function App() {
     const [posts,setPosts] = useState([]);
@@ -13,9 +11,9 @@ function App() {
     }
         return (
 
-    <div >
-      <Users userPostsById={userPostsById} posts={posts}/>
-
+    <div style={{display:'flex',flexWrap:'wrap'}}>
+      <Users userPostsById={userPostsById}/>
+       <UserPosts posts={posts}/>
     </div>
   );
 }
