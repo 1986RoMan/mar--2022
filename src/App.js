@@ -6,8 +6,8 @@ function App() {
   return (
     <div >
          <Posts/>
-        <hr/>
-      <Comments/>
+         <hr/>
+         <Comments/>
     </div>
   );
 }
