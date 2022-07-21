@@ -1,9 +1,10 @@
-import {createAsyncThunk, createSlice, isFulfilled} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {carServices} from "../../services";
 
 const initialState={
-    cars:[]
+    cars:[],
+    status:null
 }
 const allCars=createAsyncThunk(
     'carSlice/allCars',
@@ -14,9 +15,13 @@ const allCars=createAsyncThunk(
 );
 const createNewCar=createAsyncThunk(
     'carSlice/createNewCar',
-    async ({car})=> {
-        const{data}=await carServices.createCar(car)
-        return data
+    async ({car},{rejectWithValue})=> {
+        try {
+            const {data} = await carServices.createCar(car)
+            return data
+        }catch (e) {
+            return rejectWithValue(e.message)
+        }
     }
 );
 const deletCar=createAsyncThunk(
@@ -32,9 +37,14 @@ const carSlice=createSlice({
     initialState,
     reducers:{
         delCar: ((state, action) => {
-            const index=state.cars.findIndex(value => value.id===action.payload)
+            const index=state.cars.findIndex(value => value.id===action.payload.id)
             state.cars.splice(index,1)
-        })
+        }),
+        clearStatus:((state,action)=>{
+            state.status=action.payload
+            }
+
+        )
     },
     extraReducers:(builder)=>{
         builder
@@ -44,17 +54,22 @@ const carSlice=createSlice({
             .addCase(createNewCar.fulfilled,(state,action)=>{
                 state.cars.push(action.payload)
             })
+            .addCase(createNewCar.rejected,(state,action)=>{
+                console.log(action.payload)
+                state.status=action.payload
+            })
 
 }
 })
 
-const {reducer:carReducer,actions:{delCar}} = carSlice;
+const {reducer:carReducer,actions:{delCar,clearStatus}} = carSlice;
 
 const carActions={
     allCars,
     createNewCar,
     deletCar,
-    delCar
+    delCar,
+    clearStatus
 }
 
 export {carActions,carReducer}

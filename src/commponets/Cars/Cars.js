@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
+
 import {Car} from "../Car/Car";
 import {carActions} from "../../redux";
 
 const Cars = () => {
-    const {cars} = useSelector(state => state.car);
+    const {cars,status} = useSelector(state => state.car);
     console.log(cars)
     const dispatch = useDispatch();
     useEffect(()=>{
@@ -13,6 +14,7 @@ const Cars = () => {
 
     return (
         <div>
+            {status &&<h2>{status}</h2>}
             {cars.map(car=><Car key={car.id} car={car}/>)}
         </div>
     );
